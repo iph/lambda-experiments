@@ -1,4 +1,4 @@
-module github.com/iph/lambda-experiments/global-layers/app
+module github.com/iph/lambda-experiments/delete-layers/app
 
 require (
 	github.com/aws/aws-lambda-go v1.10.0

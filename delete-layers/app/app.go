@@ -1,4 +1,4 @@
-package main // import "github.com/iph/lambda-experiments/global-layers/app"
+package main // import "github.com/iph/lambda-experiments/delete-layers/app"
 
 import (
 	"context"
