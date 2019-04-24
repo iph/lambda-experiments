@@ -2,10 +2,8 @@
 
 User stated essentially the following:
 
-```
-* Once Layers are deleted or permissions are deleted, all lambda functions referring to that layer can no longer be "INVOKED"
+* Once Layers are deleted or permissions are deleted, all lambda functions referring to that layer can no longer be "INVOKED" or on cold start, they will fail to run (so new containers). 
 
-```
 
 ## Experimental setup
  In this example application, I have a lambda layer that has:
