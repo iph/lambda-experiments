@@ -15,10 +15,12 @@ User stated essentially the following:
 |- example.txt
 ```
 
-in example.txt is "Hello Layer". My Lambda Function will be invoked, and os.stat the file. If the their statement is true, then if I invoke after the layer is deleted, either:
+in example.txt is "Hello Layer". My Lambda Function will be invoked, and os.stat the file (based on the documentation, all files are unloaded into /opt, so I can refer to it via `/opt/example.txt`). If a layer is dynamically built on runtime, then:
 
-* The function will fail because it's missing the layer
-* The function will fail to stat the file because it no longer exists.
+* The function will fail because it's missing the layer and you see some weird error on invoke
+* The function will fail to stat the file because it no longer exists since the layer no longer exists.
+
+Otherwise, all invokes will continue to work since Lambda is referencing immutable/post-processed objects instead of the original artifacts on boot.
 
 ### Assumptions made
 
@@ -48,7 +50,9 @@ Successfully created/updated stack - global-layers
     "ExecutedVersion": "$LATEST",
     "StatusCode": 200
 }
+
 deleted lambda layer now running invoke again, should show output: 13
+
 {"Output":"13"}{
     "ExecutedVersion": "$LATEST",
     "StatusCode": 200
@@ -58,6 +62,4 @@ cool, now cleaning up...
 
 ## Conclusion
 
-Lambda layers are merged into a single artifact on create and update function. This means that on invoke, the invoke is referring to the merged artifact and not doing on the fly downloading of
-multiple files. So if something happens out of band like layer permissions removal or layer deletion, the function can continue to work, but on next update, the function will fail to update
-since the reference is no longer there (that's cool though because your original function always still works).
+If you delete a lambda layer, a function can still refer to the layers that were deleted on invoke. It is only on update or create where a user would experience errors. 
