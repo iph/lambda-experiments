@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform:
+  - AWS::Serverless-2016-10-31
+Parameters:
+  AppName:
+    Type: String
+    Description: Name of App
+
+Resources:
+  LambdaTrustRole:
+    Type: 'AWS::IAM::Role'
+    Description: Need a role for lambda, here is a role for lambda.
+    Properties:
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+                Effect: Allow
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+  ReadLayerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/app.zip
+      Handler: app
+      Runtime: go1.x
+      Role: !GetAtt LambdaTrustRole.Arn
