@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform:
   - AWS::Serverless-2016-10-31
-Parameters:
-  AppName:
-    Type: String
-    Description: Name of App
 
 Resources:
   LambdaTrustRole:
@@ -35,7 +31,19 @@ Resources:
   ReadLayerLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: app/app.zip
+      FunctionName: golayerdelete
+      CodeUri: ./app/app.zip
       Handler: app
       Runtime: go1.x
+      Layers:
+        - !Ref ExampleLayer
       Role: !GetAtt LambdaTrustRole.Arn
+
+  ExampleLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - go1.x
+      ContentUri: ./layer/layer.zip
+      LicenseInfo: "Apache 2.0, the super open one"
+      LayerName: "example"
