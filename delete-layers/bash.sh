@@ -1,4 +1,4 @@
-export S3_BUCKET=sean-myers-pdx
+export S3_BUCKET=ENTER-BUCKET-HERE
 cd app
 go mod vendor
 GOOS=linux go build
