@@ -28,7 +28,8 @@ Otherwise, all invokes will continue to work since Lambda is referencing immutab
 
 ### Modifications user needs to run to run the experiment
 
-Add your S3_BUCKET to the top of the bash.sh script.
+* Add your S3_BUCKET to the top of the bash.sh script.
+* If you want to wait for a cold start, add a sleep after layer deletion.
 
 ## Output
 
