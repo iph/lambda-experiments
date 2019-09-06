@@ -1,4 +1,4 @@
-export S3_BUCKET=ENTER-BUCKET-HERE
+export S3_BUCKET=sean-myers-pdx
 cd app
 go mod vendor
 GOOS=linux go build
@@ -20,7 +20,5 @@ aws --region us-west-2 lambda invoke --function-name golayerdelete /dev/stdout
 echo "cool, now cleaning up..."
 
 # Cool now clean up.
-aws --region us-west-2 cloudformation delete-stack --stack-name global-layers
+#aws --region us-west-2 cloudformation delete-stack --stack-name global-layers
 rm app/app
-rm app/app.zip
-rm layer/layer.zip

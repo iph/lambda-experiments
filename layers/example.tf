@@ -1,14 +1,7 @@
 provider "aws" {
   skip_region_validation = true
-  region = "us-west-2"
 }
 
-
-
-module "vpc-integ"{
-  source = "./vpc"
-  tag = "vpc-working"
-}
 
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
@@ -30,27 +23,6 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
-resource "aws_iam_role_policy" "vpc" {
-  role = aws_iam_role.iam_for_lambda.name
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "ec2:*",
-        "cloudwatch:*"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
-}
-
-
-/*
 resource "aws_lambda_function" "test_lambda" {
   filename      = "app.zip"
   function_name = "lambda_function_name"
@@ -69,4 +41,4 @@ resource "aws_lambda_function" "test_lambda" {
       foo = "bar"
     }
   }
-}*/
+}
