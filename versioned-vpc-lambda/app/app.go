@@ -2,10 +2,10 @@ package main // import "github.com/iph/lambda-experiments/versioned-vpc-lambda/a
 
 import (
 	"context"
-	"os"
-	"strconv"
 	"github.com/aws/aws-lambda-go/lambda"
-
+	"io/ioutil"
+	"net/http"
+	"time"
 )
 
 type Response struct {
@@ -13,16 +13,24 @@ type Response struct {
 }
 
 func HandleRequest(ctx context.Context) (Response, error) {
-	res, err := os.Stat("/opt/example.txt")
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Get("https://example.com")
 	if err != nil {
-		return Response {
-			Output: err.Error(),
-		}, nil
+
+		return Response{Output: err.Error()}, nil
+	}
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return Response{Output: err.Error()}, nil
 	}
 
-	return Response{ Output: strconv.FormatInt(res.Size(), 10)}, nil
+	return Response{Output: string(b)}, nil
 }
 
-func main(){
+func main() {
 	lambda.Start(HandleRequest)
 }

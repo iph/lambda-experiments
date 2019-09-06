@@ -95,3 +95,11 @@ resource "aws_security_group" "lb" {
     cidr_blocks = [local.cidr]
   }
 }
+
+output "security-group" {
+  value = aws_security_group.lb.id
+}
+
+output "subnets" {
+  value = aws_subnet.private.*.id
+}
