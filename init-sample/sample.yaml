@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  LambdaTrustRole:
+    Type: 'AWS::IAM::Role'
+    Description: Need a role for lambda, here is a role for lambda.
+    Properties:
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+                Effect: Allow
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code: ./app.zip
+      Handler: app
+      Runtime: go1.x
+      Timeout: 20
+      Role: !GetAtt LambdaTrustRole.Arn
+      FunctionName: hello-init-1
+      Environment:
+        Variables:
+          TEST: hi
+
+  LambdaVersion:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref LambdaFunction
+
