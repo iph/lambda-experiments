@@ -3,8 +3,6 @@ provider "aws" {
   region                 = "us-west-2"
 }
 
-
-
 module "vpc-integ" {
   source = "./vpc"
   tag    = "vpc-working"
@@ -70,15 +68,15 @@ resource "aws_lambda_function" "test_lambda" {
   timeout          = 30
   runtime          = "go1.x"
 
-  //  vpc_config {
-  //    security_group_ids = [module.vpc-integ-bad.security-group]
-  //    subnet_ids = module.vpc-integ-bad.subnets
-  //  }
+    vpc_config {
+      security_group_ids = [module.vpc-integ-bad.security-group]
+      subnet_ids = module.vpc-integ-bad.subnets
+    }
 
-  vpc_config {
-    security_group_ids = [module.vpc-integ.security-group]
-    subnet_ids         = [module.vpc-integ.subnets]
-  }
+  //vpc_config {
+  //  security_group_ids = [module.vpc-integ.security-group]
+  //  subnet_ids         = [module.vpc-integ.subnets]
+  //}
 
   environment {
     variables = {
