@@ -8,7 +8,7 @@ cd ..
 cd layer
 zip layer.zip example.txt
 cd ..
-aws --region us-west-2 cloudformation package --template sample.yaml --s3-bucket $S3_BUCKET --output-template exported.yaml
+aws --region us-west-2 cloudformation package --template 1_initial_setup.yaml --s3-bucket $S3_BUCKET --output-template exported.yaml
 aws --region us-west-2 cloudformation deploy --template-file exported.yaml --stack-name global-layers --capabilities CAPABILITY_IAM
 # Prints 13 (size of file)
 aws --region us-west-2 lambda invoke --function-name golayerdelete /dev/stdout
