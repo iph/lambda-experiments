@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"os"
 	"strconv"
 	"time"
 )
@@ -14,13 +13,11 @@ type Response struct {
 }
 
 func init(){
-	time.Sleep(10*time.Second)
+	time.Sleep(9*time.Second)
 }
 
 func HandleRequest(ctx context.Context) (Response, error) {
-	testVal := os.Getenv("TEST")
-	fmt.Println("Val: ", testVal)
-
+	fmt.Println("Hello")
 	return Response{ Output: strconv.FormatInt(10, 10)}, nil
 }
 

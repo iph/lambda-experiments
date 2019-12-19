@@ -1,6 +1,6 @@
-export S3_BUCKET=PUT_BUCKET_HERE
+export S3_BUCKET=sean-myers-gru
 export REGION=sa-east-1
-export STACK_NAME=STACK_NAME
+export STACK_NAME=provisioned-demo-repro
 cd app
 go mod vendor
 GOOS=linux go build

@@ -1,3 +1,4 @@
+Transform: AWS::Serverless-2016-10-31
 AWSTemplateFormatVersion: 2010-09-09
 
 Resources:
@@ -28,20 +29,18 @@ Resources:
                 - lambda.amazonaws.com
 
   LambdaFunction:
-    Type: AWS::Lambda::Function
+    Type: 'AWS::Serverless::Function'
     Properties:
-      Code: ./app.zip
+      CodeUri: ./app.zip
       Handler: app
       Runtime: go1.x
-      Timeout: 20
+      Timeout: 40
       Role: !GetAtt LambdaTrustRole.Arn
-      FunctionName: hello-init-1
+      FunctionName: !Sub 'hello-test-${AWS::StackName}'
       Environment:
         Variables:
           TEST: hi
-
-  LambdaVersion:
-    Type: AWS::Lambda::Version
-    Properties:
-      FunctionName: !Ref LambdaFunction
+      AutoPublishAlias: live
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 15
 
