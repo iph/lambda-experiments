@@ -6,7 +6,7 @@
 *.dylib
 **/terraform.tfstate*
 **/.terraform/**
-
+.idea
 # Test binary, build with `go test -c`
 *.test
 

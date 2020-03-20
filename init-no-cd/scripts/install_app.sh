@@ -1,4 +1,4 @@
-cd ../app
+cd app
 go mod vendor
 GOOS=linux go build
 zip app.zip app

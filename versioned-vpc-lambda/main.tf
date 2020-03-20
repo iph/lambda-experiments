@@ -1,6 +1,6 @@
 provider "aws" {
   skip_region_validation = true
-  region                 = "us-west-2"
+  region                 = "af-south-1"
 }
 
 module "vpc-integ" {

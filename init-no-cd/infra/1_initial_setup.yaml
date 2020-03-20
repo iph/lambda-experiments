@@ -36,7 +36,7 @@ Resources:
       Runtime: go1.x
       Timeout: 40
       Role: !GetAtt LambdaTrustRole.Arn
-      FunctionName: !Sub 'hello-test-${AWS::StackName}'
+      FunctionName: !Sub 'slow-init-demo'
       Environment:
         Variables:
           TEST: hi
