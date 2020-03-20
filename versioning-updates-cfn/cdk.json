@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node bin/versioning-updates-cfn.ts"
+}
