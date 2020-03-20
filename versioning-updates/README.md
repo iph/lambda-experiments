@@ -30,7 +30,8 @@ New versions should not be published for other configurations outside of code sh
 
 ### Results
 
-I was wrong. Turns out things like timeout will also create a new version.
+I was wrong. After testing not just the above experiment, but also "updates to description", "updates to environment variables",
+"updates to handler", "updates to memory size" -- all created a new version of the function. 
 
 Here is the raw output:
 
