@@ -9,7 +9,11 @@ export class VersioningUpdatesCfnStack extends cdk.Stack {
       code: Code.fromAsset("assets/app.zip"),
       handler: "app",
       runtime: lambda.Runtime.GO_1_X,
-      memorySize: 128
+      memorySize: 128,
+      environment: {
+        "hi": "there",
+        "hi2": "there",
+      }
     });
 
     new lambda.CfnVersion(this, "version1", {

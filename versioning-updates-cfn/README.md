@@ -72,3 +72,58 @@ The above expected outcome is true:
   3/4 | 12:46:21 AM | DELETE_COMPLETE      | AWS::Lambda::Version  | version1
   4/4 | 12:46:21 AM | UPDATE_COMPLETE      | AWS::CloudFormation::Stack | VersioningUpdatesCfnStack
 ```
+
+### Setup 3: Manual Steps
+
+In order to run this repro, you need to do the following steps:
+
+1. Source whatever credentials you want to use to run this experiment.
+2. go to the head of this directory (where you are reading this README)
+3. run `npm install`
+4. run `cdk deploy`
+5. open `lib/versioning-updates-cfn-stack.ts`, and update `"version1"` to `"version2"`
+6. open `lib/versioning-updates-cfn-stack.ts`, and swap the environment lines so the ordering of them is reversed should look something like `      environment: {
+                                                                                                                                                      "hi2": "there",
+                                                                                                                                                      "hi": "there"
+                                                                                                                                                    }`
+7. run `npm install; cdk deploy`
+
+### Expected outcome 3
+
+Unknown. Should fail as it's not really doing any updates, and cloudformation doesn't take kindly to that
+(e.g. outcome 1).
+
+### Outcome 3
+
+The cloudformation update failed. This is because no update was made, but the version was bumped. This means
+items in maps are commutative in ordering for Lambda (there was no update applied, according to Lambda).
+
+Relevant parts from cdk synth:
+
+**Before**
+
+```yaml
+      Environment:
+        Variables:
+          hi: there
+          hi2: there
+```
+
+**After**
+
+```
+      Environment:
+        Variables:
+          hi2: there
+          hi: there
+```
+
+so the map was updated in cloudformation
+
+Output of cloudformation:
+
+```
+ 0/3 | 1:01:06 AM | UPDATE_IN_PROGRESS   | AWS::CloudFormation::Stack | VersioningUpdatesCfnStack User Initiated
+ 0/3 | 1:01:34 AM | CREATE_IN_PROGRESS   | AWS::Lambda::Version  | version2
+ 1/3 | 1:01:35 AM | CREATE_FAILED        | AWS::Lambda::Version  | version2 A version for this Lambda function exists ( 3 ). Modify the function to create a new version.
+```
