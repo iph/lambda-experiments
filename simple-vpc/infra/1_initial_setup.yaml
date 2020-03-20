@@ -2,45 +2,14 @@ Transform: AWS::Serverless-2016-10-31
 AWSTemplateFormatVersion: 2010-09-09
 
 Resources:
-  LambdaTrustRole:
-    Type: 'AWS::IAM::Role'
-    Description: Need a role for lambda, here is a role for lambda.
+  SimpleVpc:
+    Type: 'AWS::EC2::VPC'
     Properties:
-      Path: /
-      ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-      Policies:
-        - PolicyName: LambdaPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Action:
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                Resource: '*'
-                Effect: Allow
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action: 'sts:AssumeRole'
-            Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
+      CidrBlock: 10.0.0.0/16
 
-  LambdaFunction:
-    Type: 'AWS::Serverless::Function'
+  SimpleSubnet:
+    Type: 'AWS::EC2::Subnet'
     Properties:
-      CodeUri: ./app.zip
-      Handler: app
-      Runtime: go1.x
-      Timeout: 40
-      Role: !GetAtt LambdaTrustRole.Arn
-      FunctionName: !Sub 'hello-test-${AWS::StackName}'
-      Environment:
-        Variables:
-          TEST: hi
-      AutoPublishAlias: live
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: 15
-
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref SimpleVpc
+      AvailabilityZone: 'usw2-az1'

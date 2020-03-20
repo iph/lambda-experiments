@@ -1,15 +1,10 @@
 provider "aws" {
-  skip_region_validation = true
-  region                 = "us-east-1"
-
-  endpoints {
-    lambda = "https://gamma.lambda.aws.a2z.com"
-  }
+  region  = "us-west-1"
 }
 
 
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda2"
+  name = "iam_for_lambda-version-experiment"
 
   assume_role_policy = <<EOF
 {
@@ -18,7 +13,7 @@ resource "aws_iam_role" "iam_for_lambda" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "lambda.preprod.amazonaws.com"
+        "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -30,7 +25,7 @@ EOF
 
 resource "aws_lambda_function" "test_lambda" {
   filename      = "app.zip"
-  function_name = "lambda_function_name"
+  function_name = "lambda-example-versioning-function"
   role          = "${aws_iam_role.iam_for_lambda.arn}"
   handler       = "app"
   publish       = true
