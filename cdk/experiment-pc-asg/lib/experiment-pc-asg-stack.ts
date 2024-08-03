@@ -1,11 +1,13 @@
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda'
-import * as asg from '@aws-cdk/aws-applicationautoscaling'
-import {PredefinedMetric} from "@aws-cdk/aws-applicationautoscaling";
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda'
+import * as asg from 'aws-cdk-lib/aws-applicationautoscaling'
+// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
-export class PcAsgStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class ExperimentPcAsgStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
     const funct = new lambda.Function(this, "lambda", {
       code: lambda.Code.fromAsset("assets/app.zip"),
       handler: "app",
@@ -34,10 +36,13 @@ export class PcAsgStack extends cdk.Stack {
 
     target.scaleToTrackMetric('PcuTracking', {
       targetValue: 0.8,
-      predefinedMetric: PredefinedMetric.LAMBDA_PROVISIONED_CONCURRENCY_UTILIZATION
+      predefinedMetric: asg.PredefinedMetric.LAMBDA_PROVISIONED_CONCURRENCY_UTILIZATION
     });
+    // The code that defines your stack goes here
 
+    // example resource
+    // const queue = new sqs.Queue(this, 'ExperimentPcAsgQueue', {
+    //   visibilityTimeout: cdk.Duration.seconds(300)
+    // });
   }
-
-
 }
